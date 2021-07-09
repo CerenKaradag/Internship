@@ -2,6 +2,7 @@ package com.example.matine.user;
 
 import com.example.matine.model.ReportUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +31,13 @@ public class UserController {
     }
 
     @PostMapping("/process_register")
-    public void registerUser(@RequestBody User user){
-        userService.addNewUser(user);
+    public ResponseEntity<?> registerUser(@RequestBody User user){
+        return userService.addNewUser(user);
     }
 
     @PostMapping("/process_login")
-    public void login(@RequestBody LoginRequest loginRequest){
-        userService.processLogin(loginRequest);
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+        return userService.processLogin(loginRequest);
     }
 
     @PostMapping("/login_failure")

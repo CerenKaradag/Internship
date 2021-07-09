@@ -3,10 +3,14 @@ package com.example.matine.user;
 import com.example.matine.exception.ApiRequestException;
 import com.example.matine.model.ReportUser;
 import com.example.matine.repository.ReportUserRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +59,7 @@ public class UserService {
         if (!passwordEncoder.matches(loginRequest.password, user.getPassword())) {
             throw new ApiRequestException("Wrong password.");
         }
-        System.out.println(ResponseEntity.ok().body(user));
+
         return ResponseEntity.ok().body(user);
     }
 
