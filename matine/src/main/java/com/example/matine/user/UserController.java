@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "matine")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     private  final UserService userService;

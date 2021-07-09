@@ -35,9 +35,7 @@ public class ContentService {
         this.archiveRepository = archiveRepository;
     }
 
-    public List<Content> getContents() {
-        return contentRepository.findAll();
-    }
+
 
     public void addNewContent(Content content) {
         Optional<Content> contentOptional = contentRepository.findContentByContentName(content.getContentName());
@@ -91,5 +89,11 @@ public class ContentService {
 
     public List<Content> searchContents(Content content) {
         return contentRepository.searchContentByContentName(content.getContentName());
+    }
+
+    public List<Content> getContentWithGenreId(Long genreId) {
+            List<Content> contents = contentRepository.findContentByGenreId(genreId);
+            return contents;
+
     }
 }

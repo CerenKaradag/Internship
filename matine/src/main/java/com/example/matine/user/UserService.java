@@ -55,6 +55,7 @@ public class UserService {
         if (!passwordEncoder.matches(loginRequest.password, user.getPassword())) {
             throw new ApiRequestException("Wrong password.");
         }
+        System.out.println(ResponseEntity.ok().body(user));
         return ResponseEntity.ok().body(user);
     }
 

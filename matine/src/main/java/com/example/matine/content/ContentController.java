@@ -21,9 +21,9 @@ public class ContentController {
         this.contentService = contentService;
     }
 
-    @GetMapping(path = "/matine/{genreName}/content")
-    public List<Content> getContents() {
-        return contentService.getContents();
+    @GetMapping(path="matine/{genreID}/contents")
+    public List<Content> getSubClubWithClubId(@PathVariable("genreID") Long genreId){
+        return  contentService.getContentWithGenreId(genreId);
     }
 
     @PostMapping(path = "/matine/{genreName}/content")
