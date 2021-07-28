@@ -1,9 +1,11 @@
 package com.example.matine.model;
 
+import lombok.Data;
 import javax.persistence.*;
 
 @Entity
 @Table
+@Data
 public class Archive {
 
     @Id
@@ -36,36 +38,4 @@ public class Archive {
         this.contentId = contentId;
     }
 
-    public Long getArchiveId() {
-        return archiveId;
-    }
-
-    public void setArchiveId(Long archiveId) {
-        this.archiveId = archiveId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
-    }
-
-    @Override
-    public String toString() {
-        return "Archive{" +
-                "archiveId=" + archiveId +
-                ", userId=" + userId +
-                ", contentId=" + contentId +
-                '}';
-    }
 }

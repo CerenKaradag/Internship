@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,33 +42,36 @@ public class ProfileManagementService {
         return myContents;
     }
 
-    public void updateUser(Long userId, User userToBeUpdated) {
+    @Transactional
+    public void updateUser(Long userId, User userToBeUpdated){
+        User user = userRepository.findById(userId)
+                .orElseThrow( ()-> new ApiRequestException("This user does not exist."));
 
-        User user = userRepository.findById(userId).orElseThrow( ()-> new ApiRequestException("Böyle bir kullanıcı yok!"));
-
-        //kullanıcı adı güncelleme
-        if(userId == userRepository.findUserByUsernameOpt(userToBeUpdated.getUserName()).get().getId()){
-            if (userToBeUpdated.getUserName() != null && userToBeUpdated.getUserName().length() > 0) {
+        // username update
+        if(userId.equals(userToBeUpdated.getId())){
+            if (userToBeUpdated.getUserName() != null && userToBeUpdated.getUserName().length()>0) {
                 user.setUserName(userToBeUpdated.getUserName());
             }
-        }
-        else{
+        }else{
+            System.out.println("aaaaaaaaaaa");
             if( userRepository.findUserByUsernameOpt(userToBeUpdated.getUserName()).isPresent()){
-                throw new ApiRequestException("Bu kullanıcı adı başkası tarafından alınmış!");
+                throw new ApiRequestException("Username is already taken.");
             } else if (userToBeUpdated.getUserName() != null && userToBeUpdated.getUserName().length()>0) {
+                System.out.println("bbbbbbbbbbbbbb");
                 user.setUserName(userToBeUpdated.getUserName());
             }
         }
 
-        // email güncelleme
-        if(userId == userRepository.findByUserEmailOpt(userToBeUpdated.getEmail()).get().getId() ){
+
+        // email update
+        if(userId.equals(userToBeUpdated.getId())){
             if (userToBeUpdated.getEmail() != null && userToBeUpdated.getEmail().length()>0) {
                 user.setEmail(userToBeUpdated.getEmail());
             }
         }
         else{
             if( userRepository.findByUserEmailOpt(userToBeUpdated.getEmail()).isPresent()){
-                throw new ApiRequestException("Kayıtlı bir email kullandınız.");
+                throw new ApiRequestException("E-mail is already taken.");
             }  else if (userToBeUpdated.getEmail() != null && userToBeUpdated.getEmail().length()>0) {
                 user.setEmail(userToBeUpdated.getEmail());
             }
@@ -75,32 +79,32 @@ public class ProfileManagementService {
 
 
 
-        // isim güncelleme
+        // firstname update
         if (userToBeUpdated.getFirstName() != null && userToBeUpdated.getFirstName().length() > 0){
             user.setFirstName(userToBeUpdated.getFirstName());
         }
 
-        // soyisim güncelleme
+        // lastname update
         if (userToBeUpdated.getLastName() != null && userToBeUpdated.getLastName().length() > 0){
             user.setLastName(userToBeUpdated.getLastName());
         }
 
-        // şifre güncelleme
+        // password update
         if( userToBeUpdated.getPassword() != null && userToBeUpdated.getPassword().length()>1 ){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String enteredPassword = userToBeUpdated.getPassword();
             String dbPassword = user.getPassword();
-            if (passwordEncoder.matches(enteredPassword, dbPassword)) {
-                throw new ApiRequestException("Şifreniz değişmedi.");
-            } else {
-                String encodedPassword = passwordEncoder.encode(userToBeUpdated.getPassword());
-                user.setPassword(encodedPassword);
-            }
+
+            String encodedPassword = passwordEncoder.encode(userToBeUpdated.getPassword());
+            user.setPassword(encodedPassword);
+
         }
 
-        // doğum tarihi güncelleme
+        // date of birth updated
         if (userToBeUpdated.getDateOfBirth() != null){
             user.setDateOfBirth(userToBeUpdated.getDateOfBirth());
         }
+
     }
+
 }

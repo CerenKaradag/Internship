@@ -1,9 +1,11 @@
 package com.example.matine.content;
 
+import lombok.Data;
 import javax.persistence.*;
 
 @Entity
 @Table
+@Data
 public class Content {
 
     @Id
@@ -56,59 +58,5 @@ public class Content {
         this.genreId  = genreId;
     }
 
-    public Long getContentId() {
-        return contentId;
-    }
 
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
-    }
-
-    public String getContentName() {
-        return contentName;
-    }
-
-    public void setContentName(String contentName) {
-        this.contentName = contentName;
-    }
-
-    public String getContentDescription() {
-        return contentDescription;
-    }
-
-    public void setContentDescription(String contentDescription) {
-        this.contentDescription = contentDescription;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public ContentType getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(ContentType contentType) {
-        this.contentType = contentType;
-    }
-
-    public Long getGenreId() { return genreId; }
-
-    public void setGenreId(Long genreId) { this.genreId = genreId; }
-
-    @Override
-    public String toString() {
-        return "Content{" +
-                "contentId=" + contentId +
-                ", contentName='" + contentName + '\'' +
-                ", contentDescription='" + contentDescription + '\'' +
-                ", genre='" + genre + '\'' +
-                ", contentType=" + contentType + '\'' +
-                ", genreId=" + genreId +
-                '}';
-    }
 }

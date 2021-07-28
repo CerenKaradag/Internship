@@ -30,9 +30,9 @@ public class CommentController {
         commentService.addComment(contentId,userId,comment);
     }
 
-    @DeleteMapping(path = "/{contentId}/{userId}")
-    public void deleteComment(@PathVariable ("userId") Long userId,
-                              @RequestBody Comment comment){
-        commentService.deleteComment(userId, comment);
+    @DeleteMapping(path = "/{commentId}")
+    public void deleteComment(@PathVariable("commentId") Long commentId){
+        System.out.println(commentId);
+        commentService.deleteComment(commentId);
     }
 }

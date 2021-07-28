@@ -3,14 +3,13 @@ package com.example.matine.user;
 import com.example.matine.exception.ApiRequestException;
 import com.example.matine.model.ReportUser;
 import com.example.matine.repository.ReportUserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.net.http.HttpResponse;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,10 +38,14 @@ public class UserService {
         user.setUserRole(UserRole.MEMBER);
 
         if (user.getFirstName().length() < 2 && user.getLastName().length() < 2) {
-            throw new ApiRequestException("Name/Lastname is not valid.");
+            throw new ApiRequestException("İsim/Soyisim geçersiz!");
         }
         if (userRepository.findUserByEmail(user.getEmail()) != null) {
-            throw new ApiRequestException("E-mail is not valid.");
+            throw new ApiRequestException("E-mail geçersiz!");
+        }
+        if(Period.between(user.getDateOfBirth(), LocalDate.now()).getYears() < 18){
+            throw new ApiRequestException("Yaşınız kayıt için uygun değil!");
+
         }
 
         userRepository.save(user);
@@ -53,11 +56,11 @@ public class UserService {
         User user = userRepository.findUserByEmail(loginRequest.email);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (user == null) {
-            throw new ApiRequestException("E-mail not found.");
+            throw new ApiRequestException("Böyle bir email bulunamadı.");
         }
 
         if (!passwordEncoder.matches(loginRequest.password, user.getPassword())) {
-            throw new ApiRequestException("Wrong password.");
+            throw new ApiRequestException("Şifreniz yanlış.");
         }
 
         return ResponseEntity.ok().body(user);
@@ -65,17 +68,19 @@ public class UserService {
 
     public void reportUser(Long userId, ReportUser reportUser) {
 
+        System.out.println(reportUser.getReportedUserName());
         reportUser.setReportingId(userId);
-        reportUser.setReportedId(reportUser.getReportedId());
         User reportedUser = userRepository.findUserByUsername(reportUser.getReportedUserName());
-        reportedUser.setReported(true);
+        reportUser.setReportedId(reportedUser.getId());
 
         Optional<ReportUser> reportUserOptional = reportUserRepository.findReportUserByReportedIdAndReportingId(reportUser.getReportingId(),
                 reportUser.getReportedId());
         if (reportUserOptional.isPresent()) {
-            throw new ApiRequestException("Bu kullanıcıyı daha önce bildirdiniz");
+            throw new ApiRequestException("Bu kullanıcıyı daha önce bildirdiniz!");
         }
 
+        reportedUser.setIsReported(true);
+        reportUser.setReportedUserName(reportedUser.getUserName());
         reportUserRepository.save(reportUser);
     }
 
@@ -89,24 +94,48 @@ public class UserService {
 
     public void warnUser( ReportUser reportUser) {
         
-        User warnUser = userRepository.findById(reportUser.getReportedId()).get();
-        if (warnUser.getWarned()){
+        User warnUser = userRepository.findUserByUsername(reportUser.getReportedUserName());
+        if (warnUser.getIsWarned()){
             throw new ApiRequestException("Bu kullanıcıyı daha önce uyardınız!");
         }
-        warnUser.setReported(false);
-        warnUser.setWarned(true);
+        warnUser.setIsReported(false);
+        warnUser.setIsWarned(true);
+        reportUserRepository.delete(reportUser);
+        System.out.println(warnUser);
     }
 
-    public void unwarnUser(ReportUser reportUser) {
+    public void unwarnUser(User warnedUser) {
 
-        User warnUser = userRepository.findById(reportUser.getReportedId()).get();
-        if (!warnUser.getWarned()){
+        User warnUser = userRepository.findUserByUsername(warnedUser.getUserName());
+        if (!warnUser.getIsWarned()){
             throw new ApiRequestException("Bu kullanıcıyı uyarı almamış!");
         }
-        warnUser.setWarned(false);
+
+        warnedUser.setIsWarned(false);
+        warnUser.setIsWarned(false);
+        userRepository.findUserByUsername(warnedUser.getUserName()).setIsWarned(false);
+        userRepository.save(warnUser);
+
     }
 
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    public List<User> getWarnedUsers() {
+
+        ArrayList<User> warnedUser = new ArrayList<>();
+        ArrayList<User> allUser = new ArrayList<>();
+        allUser.addAll(userRepository.findAll()) ;
+
+        for(int i = 0 ; i < allUser.size() ;i ++){
+            if (allUser.get(i).getIsWarned()){
+                warnedUser.add(allUser.get(i));
+            }
+
+
+        }
+
+        return warnedUser;
     }
 }

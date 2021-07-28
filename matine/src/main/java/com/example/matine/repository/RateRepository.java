@@ -14,5 +14,5 @@ public interface RateRepository extends JpaRepository<Rate, Long> {
 
     List<Rate> findByRateId(Long rateId);
 
-    Optional<Rate> findByContentId(Long contentId);
+    List<Rate> findByContentId(Long contentId);
 }

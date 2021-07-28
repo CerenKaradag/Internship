@@ -60,6 +60,7 @@ public class UserController {
     @PostMapping("/add_report/{userId}")
     public void reportUser(@PathVariable ("userId") Long userId,
                            @RequestBody ReportUser reportUser) {
+        System.out.println(reportUser);
         userService.reportUser(userId,reportUser);
     }
 
@@ -70,14 +71,18 @@ public class UserController {
 
 
     // kullanıcı uyarma ve silme
-    @PostMapping("/users")
+    @GetMapping("warned_users")
+    public List<User> getWarnedUsers() {
+        return userService.getWarnedUsers();
+    }
+    @PostMapping("/warned_users")
     public void warnUser(@RequestBody ReportUser reportUser) {
         userService.warnUser(reportUser);
     }
 
     @PutMapping("/users")
-    public void unwarnUser(@RequestBody ReportUser reportUser) {
-        userService.unwarnUser(reportUser);
+    public void unwarnUser(@RequestBody User warnedUser) {
+        userService.unwarnUser(warnedUser);
     }
 
 }

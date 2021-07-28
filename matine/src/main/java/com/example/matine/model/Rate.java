@@ -1,10 +1,11 @@
 package com.example.matine.model;
 
+import lombok.Data;
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Table
+@Data
 public class Rate {
 
     @Id
@@ -40,45 +41,5 @@ public class Rate {
         this.rate = rate;
     }
 
-    public Long getRateId() {
-        return rateId;
-    }
 
-    public void setRateId(Long rateId) {
-        this.rateId = rateId;
-    }
-
-    public Long getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Integer getRate() {
-        return rate;
-    }
-
-    public void setRate(Integer rate) {
-        this.rate = rate;
-    }
-
-    @Override
-    public String toString() {
-        return "Rate{" +
-                "rateId=" + rateId +
-                ", contentId=" + contentId +
-                ", userId=" + userId +
-                ", rate=" + rate +
-                '}';
-    }
 }

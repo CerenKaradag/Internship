@@ -1,11 +1,14 @@
 package com.example.matine.user;
 
+import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Month;
 
 @Entity
 @Table(name = "users")
+@Data
+
 public class User {
 
     @Id
@@ -99,99 +102,6 @@ public class User {
         this.userRole = userRole;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Boolean getReported() {
-        return isReported;
-    }
-
-    public void setReported(Boolean reported) {
-        isReported = reported;
-    }
-
-    public Boolean getWarned() {
-        return isWarned;
-    }
-
-    public void setWarned(Boolean warned) {
-        isWarned = warned;
-    }
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", isReported=" + isReported +
-                ", isWarned=" + isWarned +
-                ", userRole=" + userRole +
-                '}';
-    }
 }

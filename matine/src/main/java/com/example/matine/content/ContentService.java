@@ -1,6 +1,7 @@
 package com.example.matine.content;
 
 import com.example.matine.exception.ApiRequestException;
+import com.example.matine.genre.Genre;
 import com.example.matine.genre.GenreRepository;
 import com.example.matine.model.Archive;
 import com.example.matine.model.Comment;
@@ -38,10 +39,14 @@ public class ContentService {
 
 
     public void addNewContent(Content content) {
+
+        System.out.println(content);
         Optional<Content> contentOptional = contentRepository.findContentByContentName(content.getContentName());
         if(contentOptional.isPresent()){
             throw new ApiRequestException("This content already exists!");
         }
+        Optional<Genre> genre = genreRepository.findGenreByName(content.getGenre());
+        content.setGenreId(genre.get().getId());
         contentRepository.save(content);
 
     }
@@ -49,17 +54,18 @@ public class ContentService {
 
 
 
-    public void reportComment(Long contentId, Long commentId, ReportComment reportComment) {
+    public void reportComment(Long contentId,ReportComment reportComment) {
 
-        Comment comment = commentRepository.findByCommentId(commentId).get();
+        Comment comment = commentRepository.findByCommentId(reportComment.getCommentId()).get();
         Optional<Content> content = contentRepository.findById(contentId);
         if (content.isEmpty()){
             throw new ApiRequestException("Böyle bir içerik yok!");
         }
 
-        comment.setReported(true);
+        comment.setIsReported(true);
         reportComment.setContentId(contentId);
-        reportComment.setCommentId(commentId);
+        reportComment.setCommentId(reportComment.getCommentId());
+        reportComment.setCommentDescription(comment.getCommentBody());
         reportCommentRepository.save(reportComment);
 
     }
@@ -76,14 +82,18 @@ public class ContentService {
         return reportComment;
     }
 
-    public void deleteReportedComments( ReportComment reportComment) {
-        reportCommentRepository.delete(reportComment);
-        commentRepository.deleteById(reportComment.getCommentId());
+    public void deleteReportedComments(Long commentId) {
+        reportCommentRepository.delete(reportCommentRepository.findByCommentId(commentId).get());
+        commentRepository.deleteById(commentId);
     }
 
     public void addContentToMyArchive(Long userId, Content content) {
 
+        Archive existedArchive = archiveRepository.findArchiveByUserIdAndContentId(userId,content.getContentId() );
         Archive myArchive = new Archive(userId,content.getContentId());
+        if( existedArchive.getContentId() == myArchive.getContentId() ){
+            throw new ApiRequestException("Bu içerik arşivinize ekli!");
+        }
         archiveRepository.save(myArchive);
     }
 
@@ -95,5 +105,19 @@ public class ContentService {
             List<Content> contents = contentRepository.findContentByGenreId(genreId);
             return contents;
 
+    }
+
+    public List<Content> getContents() {
+        return contentRepository.findAll();
+    }
+
+    public List<ReportComment> getAllReportedComments() {
+        return reportCommentRepository.findAll();
+    }
+
+    public void deleteContentFromMyArchive(Long userId, Archive archive) {
+
+        Archive foundArchive = archiveRepository.findArchiveByUserIdAndContentId(userId, archive.getContentId());
+        archiveRepository.deleteById(foundArchive.getArchiveId());
     }
 }

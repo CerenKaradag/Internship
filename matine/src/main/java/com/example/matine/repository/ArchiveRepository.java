@@ -9,5 +9,7 @@ public interface ArchiveRepository extends JpaRepository<Archive, Long> {
 
     List<Archive> findArchiveByUserId(Long userId);
 
+    Archive findArchiveByUserIdAndContentId(Long userId, Long contentId);
+
 
 }

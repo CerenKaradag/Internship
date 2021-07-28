@@ -1,6 +1,6 @@
 package com.example.matine.content;
 
-import com.example.matine.genre.Genre;
+import com.example.matine.model.Archive;
 import com.example.matine.model.ReportComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,13 @@ public class ContentController {
         this.contentService = contentService;
     }
 
+    @GetMapping(path="matine/contents")
+    public List<Content> getAllContents(){
+        return  contentService.getContents();
+    }
+
     @GetMapping(path="matine/{genreID}/contents")
-    public List<Content> getSubClubWithClubId(@PathVariable("genreID") Long genreId){
+    public List<Content> getContentWithGenreId(@PathVariable("genreID") Long genreId){
         return  contentService.getContentWithGenreId(genreId);
     }
 
@@ -33,27 +38,39 @@ public class ContentController {
 
     //yorum bildirme
 
-    @GetMapping(path = "/matine/report/{contentId}/{commentId}" )
+    @GetMapping(path = "/matine/report/{contentId}" )
     public List<ReportComment> getReportedComments(@PathVariable ("contentId") Long contentId) {
         return contentService.getReportedComments(contentId);
     }
 
-    @PostMapping(path = "/matine/report/{contentId}/{commentId}" )
-    public void reportComment(@PathVariable ("contentId") Long contentId,
-                              @PathVariable ("commentId") Long commentId,
-                              @RequestBody ReportComment reportComment) {
-        contentService.reportComment(contentId,commentId,reportComment);
+    @GetMapping(path = "/matine/report/comments" )
+    public List<ReportComment> getAllReportedComments() {
+        return contentService.getAllReportedComments();
     }
 
-    @DeleteMapping(path = "/matine/report/{contentId}/{commentId}" )
-    public void deleteReportedComments(@RequestBody ReportComment reportComment) {
-        contentService.deleteReportedComments(reportComment);
+    @PostMapping(path = "/matine/report/{contentId}" )
+    public void reportComment(@PathVariable ("contentId") Long contentId,
+                              @RequestBody ReportComment reportComment) {
+        contentService.reportComment(contentId,reportComment);
     }
+
+    @DeleteMapping(path = "/matine/report/{commentId}" )
+    public void deleteReportedComments(@PathVariable ("commentId") Long commentId) {
+        contentService.deleteReportedComments(commentId);
+    }
+
+
 
     @PostMapping(path = "/matine/profile/archive/{userId}")
     public void addContentToMyArchive(@PathVariable ("userId") Long userId,
                                       @RequestBody Content content) {
         contentService.addContentToMyArchive(userId,content);
+    }
+
+    @DeleteMapping(path = "/matine/profile/archive/{userId}")
+    public void removeContentFromMyArchive(@PathVariable ("userId") Long userId,
+                                           @RequestBody Archive archive) {
+        contentService.deleteContentFromMyArchive(userId,archive);
     }
 
     @PostMapping(path = "/matine/search")

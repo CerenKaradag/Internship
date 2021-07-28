@@ -1,9 +1,11 @@
 package com.example.matine.actor;
 
+import lombok.Data;
 import javax.persistence.*;
 
 @Entity
 @Table
+@Data
 public class Actor {
 
     @Id
@@ -39,45 +41,5 @@ public class Actor {
         this.actorRole = actorRole;
     }
 
-    public Long getContentId() {
-        return contentId;
-    }
 
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
-    }
-
-    public Long getActorId() {
-        return actorId;
-    }
-
-    public void setActorId(Long actorId) {
-        this.actorId = actorId;
-    }
-
-    public String getActorName() {
-        return actorName;
-    }
-
-    public void setActorName(String actorName) {
-        this.actorName = actorName;
-    }
-
-    public String getActorRole() {
-        return actorRole;
-    }
-
-    public void setActorRole(String actorRole) {
-        this.actorRole = actorRole;
-    }
-
-    @Override
-    public String toString() {
-        return "Actor{" +
-                "contentId=" + contentId +
-                ", actorId=" + actorId +
-                ", actorName='" + actorName + '\'' +
-                ", actorRole='" + actorRole + '\'' +
-                '}';
-    }
 }

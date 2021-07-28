@@ -1,9 +1,11 @@
 package com.example.matine.model;
 
+import lombok.Data;
 import javax.persistence.*;
 
 @Entity
 @Table
+@Data
 public class ReportComment {
 
     @Id
@@ -45,63 +47,5 @@ public class ReportComment {
         this.commentDescription = commentDescription;
     }
 
-    public Long getCommentReportId() {
-        return commentReportId;
-    }
 
-    public void setCommentReportId(Long commentReportId) {
-        this.commentReportId = commentReportId;
-    }
-
-    public Long getReportingId() {
-        return reportingId;
-    }
-
-    public void setReportingId(Long reportingId) {
-        this.reportingId = reportingId;
-    }
-
-    public Long getReportedId() {
-        return reportedId;
-    }
-
-    public void setReportedId(Long reportedId) {
-        this.reportedId = reportedId;
-    }
-
-    public Long getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(Long commentId) {
-        this.commentId = commentId;
-    }
-
-    public Long getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
-    }
-
-    public String getCommentDescription() {
-        return commentDescription;
-    }
-
-    public void setCommentDescription(String commentDescription) {
-        this.commentDescription = commentDescription;
-    }
-
-    @Override
-    public String toString() {
-        return "ReportComment{" +
-                "commentReportId=" + commentReportId +
-                ", reportingId=" + reportingId +
-                ", reportedId=" + reportedId +
-                ", commentId=" + commentId +
-                ", contentId=" + contentId +
-                ", commentDescription='" + commentDescription + '\'' +
-                '}';
-    }
 }

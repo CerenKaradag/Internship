@@ -18,8 +18,8 @@ public class RateService {
         this.rateRepository = rateRepository;
     }
 
-    public List<Rate> getRates(Long rateId) {
-        return rateRepository.findByRateId(rateId);
+    public List<Rate> getRates(Long contentId) {
+        return rateRepository.findByContentId(contentId);
     }
 
 
@@ -29,6 +29,7 @@ public class RateService {
         rate.setUserId(userId);
         rate.setContentId(contentId);
         rateRepository.save(rate);
+        System.out.println(rate);
     }
 
 
