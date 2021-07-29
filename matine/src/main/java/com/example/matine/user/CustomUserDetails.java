@@ -4,6 +4,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+// Kullanıcı detaylarına erişilmesini sağlayan sınıf
 
 public class CustomUserDetails implements UserDetails {
 

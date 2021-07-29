@@ -1,11 +1,13 @@
 package com.example.matine.actor;
 
-import com.example.matine.exception.ApiRequestException;
-import com.example.matine.genre.Genre;
+import com.example.matine.model.ReportComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+// Controller sınıfında tanımlanan fonksiyonların içerikleri ve çalışmasını sağlayan servis sınıfı
 
 @Service
 public class ActorService {
@@ -17,15 +19,27 @@ public class ActorService {
         this.actorRepository = actorRepository;
     }
 
+    // Sistemde kayıtlı olan bütün aktörlerin bulunduğu fonksiyon
     public List<Actor> getActors() {
         return actorRepository.findAll();
     }
 
+    // Sisteme yeni aktör eklenmesini sağlayan fonksiyon
     public void addNewActor(Actor actor) {
-        Optional<Actor> actorOptional = actorRepository.findByActorName(actor.getActorName());
-        if(actorOptional.isPresent()) {
-            throw new ApiRequestException("Actor already exists!");
-        }
         actorRepository.save(actor);
+    }
+
+    // İlgili içeriğe ait aktörlerin bulunduğu fonksiyon
+    public List<Actor> getActorsForContent(Long contentId) {
+
+        ArrayList<Actor> actors = new ArrayList<>();
+
+        for (int j = 0; j < actorRepository.findAll().size() ; j++){
+            if(actorRepository.findAll().get(j).getContentId() == contentId){
+                actors.add(actorRepository.findAll().get(j));
+            }
+        }
+
+        return actors;
     }
 }

@@ -8,15 +8,20 @@ import java.time.Month;
 @Entity
 @Table(name = "users")
 @Data
-
 public class User {
 
+    // Kullanıcı modeli için oluşturulmuş user sınıfı
+    // Bir kullanıcının sahip olduğu bütün değişklenler ve oluşturulun constructorlar bu sınıfta bulunmaktadır.
+    // Lombok kullanılarak Getter-Setter fonksiyonları ve ToString fonksiyonu yazılmasına gerek kalmamıştır.
+    // @Data componenti ile bu fonksiyonlar oluşturulmuş ve erişilebilirdir.
+    // Ayrıca bu sınıfta kullanıcıların veri tabanına bağlantısı sağlanmaktadır.
     @Id
     @SequenceGenerator(
             name = "user_sequence",
             sequenceName = "user_sequence",
             allocationSize = 1
     )
+    // Kullanıcıların değişkenleri
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -46,6 +51,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+
+    // Bu sınıfa ait constructorlar
 
     public User() {
         this.userName = "";

@@ -8,6 +8,12 @@ import javax.persistence.*;
 @Data
 public class Archive {
 
+    // Arşiv modeli için oluşturulmuş archive sınıfı
+    // Bir arşivin sahip olduğu bütün değişklenler ve oluşturulun constructorlar bu sınıfta bulunmaktadır.
+    // Lombok kullanılarak Getter-Setter fonksiyonları ve ToString fonksiyonu yazılmasına gerek kalmamıştır.
+    // @Data componenti ile bu fonksiyonlar oluşturulmuş ve erişilebilirdir.
+    // Ayrıca bu sınıfta arşivlerin veri tabanına bağlantısı sağlanmaktadır.
+
     @Id
     @SequenceGenerator(
             name = "archive_sequence",
@@ -20,9 +26,13 @@ public class Archive {
             generator = "archive_sequence"
     )
 
+    // Arşiv değişkenleri
+
     private Long archiveId;
     private Long userId;
     private Long contentId;
+
+    // Bu sınıfa ait constructorlar
 
     public Archive() {
     }

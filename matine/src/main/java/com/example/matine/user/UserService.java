@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// Controller sınıfında tanımlanan fonksiyonların içerikleri ve çalışmasını sağlayan servis sınıfı
 @Service
 public class UserService {
 
@@ -26,23 +27,38 @@ public class UserService {
         this.reportUserRepository = reportUserRepository;
     }
 
-
+    // Veri tabanına kayıtlı olan kullanıcılara erişilmesini sağlayan fonksiyon
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
+    // Sisteme yeni kullanıcı eklenmesini sağlayan fonksiyon
     public ResponseEntity<?> addNewUser(User user) {
+
+        // Kullanıcının şifre uzunluğunun en az 8 karakter olup olmadığını kontrol eder,
+        // eğer uygun uzunlukta değilse ilgili hatayı önyüze iletir
+        if(user.getPassword().length() < 8){
+            throw new ApiRequestException("Şifre uzunluğu yetersiz!");
+        }
+
+        // Şifre uzunluğu uygunsa güvenlik için bunu şifreler ve öyle kaydeder
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         user.setUserRole(UserRole.MEMBER);
 
+        // Kullanıcın isim ve soyisim bilgilerini uygun uzunluk durumuna göre kontrol eder
         if (user.getFirstName().length() < 2 && user.getLastName().length() < 2) {
             throw new ApiRequestException("İsim/Soyisim geçersiz!");
         }
+
+        // Email bilgisinin sistemde başka bir kullanıcıda kayıtlı olması durumunda ilgili hatayı önyüze iletir
         if (userRepository.findUserByEmail(user.getEmail()) != null) {
             throw new ApiRequestException("E-mail geçersiz!");
         }
+
+        // Kayıt yapmak isteyen kullanıcının yaşının sisteme kayıt olmak için uygun olup olmadığını kontrol
+        // eder ve eğer uygun değilse ilgili hatayı önyüze iletir
         if(Period.between(user.getDateOfBirth(), LocalDate.now()).getYears() < 18){
             throw new ApiRequestException("Yaşınız kayıt için uygun değil!");
 
@@ -52,7 +68,13 @@ public class UserService {
         return ResponseEntity.ok().body(user);
     }
 
+
+    // Kullanıcının sisteme girişinin sağlandığı fonksiyondur
     public ResponseEntity<?> processLogin(LoginRequest loginRequest) {
+
+        // Bu fonksiyon içerisinde girilen şifrenin doğruluğu ve emailin sistemde olup olmadığı kontrol edilir
+        // Eğer hatalı bir durum varsa ilgili hatalar önyüze iletilir, hata yoksa kullanıcının girişi başarılı
+        // bir şekilde sağlanır
         User user = userRepository.findUserByEmail(loginRequest.email);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (user == null) {
@@ -66,9 +88,12 @@ public class UserService {
         return ResponseEntity.ok().body(user);
     }
 
+    // Kullanıcının başka bir kullanıcıyı bildirmesini sağlayan fonksiyondur
     public void reportUser(Long userId, ReportUser reportUser) {
 
-        System.out.println(reportUser.getReportedUserName());
+        // Bu fonksiyonun içinde bildirilmek istenilen kullanıcının daha önce bildirilip bildirilmediği denetlenir
+        // eğer kullanıcı hali hazırda bildiriliyse bildirmek isteyen kullanıcıya bu durum belirtilir
+        // fakat kullanıcı bildirili değilse bildirisi yapılır
         reportUser.setReportingId(userId);
         User reportedUser = userRepository.findUserByUsername(reportUser.getReportedUserName());
         reportUser.setReportedId(reportedUser.getId());
@@ -76,7 +101,7 @@ public class UserService {
         Optional<ReportUser> reportUserOptional = reportUserRepository.findReportUserByReportedIdAndReportingId(reportUser.getReportingId(),
                 reportUser.getReportedId());
         if (reportUserOptional.isPresent()) {
-            throw new ApiRequestException("Bu kullanıcıyı daha önce bildirdiniz!");
+            throw new ApiRequestException("Bu kullanıcı daha önce bildirildi!");
         }
 
         reportedUser.setIsReported(true);
@@ -84,31 +109,40 @@ public class UserService {
         reportUserRepository.save(reportUser);
     }
 
+    // Sistem yöneticisinin bildirili kullanıcılarla ilgili işlemleri yapabilmesi için
+    // gereken erişimi sağlayan fonksiyon
     public List<ReportUser> getReports() {
         return reportUserRepository.findAll();
     }
 
+    // Bildiri silinmesini sağlayan fonksiyon
     public void deleteReport(ReportUser reportUser) {
         reportUserRepository.delete(reportUser);
     }
 
+    // Kullanıcının uyarılmasını sağlayan fonksiyon
     public void warnUser( ReportUser reportUser) {
-        
+
+        // Bu fonksiyon içinde kullanıcının hali hazırda uyarılı olup olmadığı denetlenir
+        // Eğer kullanıcı uyarılıysa tekrar uyarılamayacağı belirtilir
         User warnUser = userRepository.findUserByUsername(reportUser.getReportedUserName());
         if (warnUser.getIsWarned()){
-            throw new ApiRequestException("Bu kullanıcıyı daha önce uyardınız!");
+            throw new ApiRequestException("Bu kullanıcı daha önce bildirildi!");
         }
         warnUser.setIsReported(false);
         warnUser.setIsWarned(true);
         reportUserRepository.delete(reportUser);
-        System.out.println(warnUser);
+
     }
 
+    // Uyarısı olan kullanıcının uyarısının kaldırılmasını sağlayan fonksiyon
     public void unwarnUser(User warnedUser) {
 
+        // Bu fonksiyon içinde kullanıcının hali hazırda uyarılı olup olmadığı denetlenir
+        // Eğer kullanıcı uyarılı değilse belirtilir
         User warnUser = userRepository.findUserByUsername(warnedUser.getUserName());
         if (!warnUser.getIsWarned()){
-            throw new ApiRequestException("Bu kullanıcıyı uyarı almamış!");
+            throw new ApiRequestException("Bu kullanıcı uyarı almamış!");
         }
 
         warnedUser.setIsWarned(false);
@@ -118,10 +152,12 @@ public class UserService {
 
     }
 
+    // Kullanıcının sistemden silinmesini sağlayan fonksiyon
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
+    // Sistemdeki uyarılı kullanıcılara erişilmesini sağlayan fonksiyon
     public List<User> getWarnedUsers() {
 
         ArrayList<User> warnedUser = new ArrayList<>();

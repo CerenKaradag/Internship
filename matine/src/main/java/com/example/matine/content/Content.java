@@ -8,6 +8,12 @@ import javax.persistence.*;
 @Data
 public class Content {
 
+    // İçerik modeli için oluşturulmuş content sınıfı
+    // Bir içeriğin sahip olduğu bütün değişklenler ve oluşturulun constructorlar bu sınıfta bulunmaktadır.
+    // Lombok kullanılarak Getter-Setter fonksiyonları ve ToString fonksiyonu yazılmasına gerek kalmamıştır.
+    // @Data componenti ile bu fonksiyonlar oluşturulmuş ve erişilebilirdir.
+    // Ayrıca bu sınıfta içeriklerin veri tabanına bağlantısı sağlanmaktadır.
+
     @Id
     @SequenceGenerator(
             name = "content_sequence",
@@ -20,12 +26,16 @@ public class Content {
             generator = "content_sequence"
     )
 
+    // İçeriklerin değişkenleri
+
     private Long contentId;
     private String contentName;
     private String contentDescription;
     private String genre;
     private ContentType contentType;
     private Long genreId;
+
+    // Bu sınıfa ait constructorlar
 
     public Content() {
         super();

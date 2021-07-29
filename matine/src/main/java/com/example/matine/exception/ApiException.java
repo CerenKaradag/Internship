@@ -1,10 +1,12 @@
 package com.example.matine.exception;
 
 import org.springframework.http.HttpStatus;
-
 import java.time.ZonedDateTime;
 
+// Sistemden dönen hataların önyüze iletilmesi için oluşturulmuş olan hata objesinin tanımlandığı sınıftır
+
 public class ApiException {
+
     private final String message;
     private final HttpStatus httpStatus;
     private final ZonedDateTime timestamp;

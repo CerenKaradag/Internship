@@ -13,6 +13,8 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RateController {
 
+    // İçeriklerin oylanması ile ilgili HTTP requestlerinin gerçekleştiği sınıftır
+
     private final RateService rateService;
 
     public RateController(RateService rateService) {
@@ -20,11 +22,13 @@ public class RateController {
         this.rateService = rateService;
     }
 
+    // Herhnagi bir içeriğe ait bütün oylara erişilmesi
     @GetMapping(path = "/{contentId}")
     public List<Rate> getRates(@PathVariable("contentId") Long contentId){
         return rateService.getRates(contentId);
     }
 
+    // Herhangi bir içerik için oy kullanılması
     @PostMapping(path = "/{contentId}/{userId}")
     public void addRate(@PathVariable("contentId") Long contentId,
                           @PathVariable("userId") Long userId,

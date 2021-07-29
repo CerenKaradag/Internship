@@ -8,6 +8,12 @@ import javax.persistence.*;
 @Data
 public class Comment {
 
+    // Yorum modeli için oluşturulmuş comment sınıfı
+    // Bir yorumun sahip olduğu bütün değişklenler ve oluşturulun constructorlar bu sınıfta bulunmaktadır.
+    // Lombok kullanılarak Getter-Setter fonksiyonları ve ToString fonksiyonu yazılmasına gerek kalmamıştır.
+    // @Data componenti ile bu fonksiyonlar oluşturulmuş ve erişilebilirdir.
+    // Ayrıca bu sınıfta yorumların veri tabanına bağlantısı sağlanmaktadır.
+
     @Id
     @SequenceGenerator(
             name = "comment_sequence",
@@ -20,12 +26,16 @@ public class Comment {
             generator = "comment_sequence"
     )
 
+    // Yorumların değişkenleri
+
     private Long commentId;
     private Long contentId;
     private Long userId;
     private String commentBody;
     private String commentedUserName;
     private Boolean isReported;
+
+    // Bu sınıfa ait constructorlar
 
     public Comment() {
     }

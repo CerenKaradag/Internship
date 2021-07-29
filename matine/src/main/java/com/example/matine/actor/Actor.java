@@ -8,6 +8,12 @@ import javax.persistence.*;
 @Data
 public class Actor {
 
+    // Oyuncu modeli için oluşturulmuş actor sınıfı
+    // Bir aktörün sahip olduğu bütün değişklenler ve oluşturulun constructorlar bu sınıfta bulunmaktadır.
+    // Lombok kullanılarak Getter-Setter fonksiyonları ve ToString fonksiyonu yazılmasına gerek kalmamıştır.
+    // @Data componenti ile bu fonksiyonlar oluşturulmuş ve erişilebilirdir.
+    // Ayrıca bu sınıfta aktörlerin veri tabanına bağlantısı sağlanmaktadır.
+
     @Id
     @SequenceGenerator(
             name = "actor_sequence",
@@ -20,10 +26,14 @@ public class Actor {
             generator = "actor_sequence"
     )
 
+    // Aktörlerin değişkenleri
+
     private Long contentId;
     private Long actorId;
     private String actorName;
     private String actorRole;
+
+    // Bu sınıfa ait constructorlar
 
     public Actor() {
     }

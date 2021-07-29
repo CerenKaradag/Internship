@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+// Controller sınıfında tanımlanan fonksiyonların içerikleri ve çalışmasını sağlayan servis sınıfı
 @Service
 public class GenreService {
 
@@ -20,14 +21,20 @@ public class GenreService {
     }
 
 
+    // Sistemdeki bütün türlere erişilen fonksiyon
     public List<Genre> getGenres() {
         return genreRepository.findAll();
     }
 
+
+    // Sisteme yeni tür eklenmesini sağlayan fonksiyon
     public void addNewGenre(Genre genre) {
+
+        // Sisteme eklenmek istenen türün sistemde bulunup bulunmadığı kontrol edilir,
+        // eğer bulunuyorsa ilgili hata önyüze iletilir, bulunmuyorsa yeni tür sisteme eklenir
         Optional<Genre> genreOptional = genreRepository.findGenreByName(genre.getName());
         if(genreOptional.isPresent()) {
-            throw new ApiRequestException("Genre already exists!");
+            throw new ApiRequestException("Bu tür sistemde bulunmakta!");
         }
         genreRepository.save(genre);
     }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+// Sistemde kayıtlı olan kullanıcıya erişim sağlanırken kullanılan servis
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// Controller sınıfında tanımlanan fonksiyonların içerikleri ve çalışmasını sağlayan servis sınıfı
 @Service
 public class ProfileManagementService {
 
@@ -28,10 +29,12 @@ public class ProfileManagementService {
         this.archiveRepository = archiveRepository;
     }
 
+    // Kulanıcı id bilgisi ile kullanıcıya erişilmesini sağlayan fonksiyon
     public Optional<User> getUserById(Long userId) {
         return userRepository.findById(userId);
     }
 
+    // Kullanıcının id bilgisi ile kullanıcının arşivine eklediği içeriklere erişilmesini sağlayan fonksiyon
     public List<Content> getMyArchive(Long userId) {
         List<Archive> myArchive = archiveRepository.findArchiveByUserId(userId);
         List<Content> myContents = new ArrayList<>();
@@ -42,28 +45,37 @@ public class ProfileManagementService {
         return myContents;
     }
 
+    // Kullanıcı bilgilerinin güncellenmesini sağlayan fonksiyon
     @Transactional
     public void updateUser(Long userId, User userToBeUpdated){
-        User user = userRepository.findById(userId)
-                .orElseThrow( ()-> new ApiRequestException("This user does not exist."));
 
-        // username update
+        // Sistemde güncellenilmek istenilen kullanıcının var olup olmadığı kontrol edilir,
+        // eğer yokse ilgili hata önyüze iletilir
+
+        User user = userRepository.findById(userId)
+                .orElseThrow( ()-> new ApiRequestException("Böyle bir kullanıcı bulunmamaktadır!"));
+
+        // Kullanıcı adı güncellenmesi, kullanıcının kullanmak istediği kullanıcı adı varsa
+        // ve başkası tarafından kullanılmamışsa güncellemesi yapılır, bu şartlara uymuyorsa
+        // ilgili hatalar önyüze iletilir
+
         if(userId.equals(userToBeUpdated.getId())){
             if (userToBeUpdated.getUserName() != null && userToBeUpdated.getUserName().length()>0) {
                 user.setUserName(userToBeUpdated.getUserName());
             }
         }else{
-            System.out.println("aaaaaaaaaaa");
             if( userRepository.findUserByUsernameOpt(userToBeUpdated.getUserName()).isPresent()){
-                throw new ApiRequestException("Username is already taken.");
+                throw new ApiRequestException("Bu kullanıcı adı başka bir kullanıcıya ait!");
             } else if (userToBeUpdated.getUserName() != null && userToBeUpdated.getUserName().length()>0) {
-                System.out.println("bbbbbbbbbbbbbb");
                 user.setUserName(userToBeUpdated.getUserName());
             }
         }
 
 
-        // email update
+// K    // Email güncellenmesi, kullanıcının kullanmak istediği email varsa
+        // ve başkası tarafından kullanılmamışsa güncellemesi yapılır, bu şartlara uymuyorsa
+        // ilgili hatalar önyüze iletilir
+
         if(userId.equals(userToBeUpdated.getId())){
             if (userToBeUpdated.getEmail() != null && userToBeUpdated.getEmail().length()>0) {
                 user.setEmail(userToBeUpdated.getEmail());
@@ -71,7 +83,7 @@ public class ProfileManagementService {
         }
         else{
             if( userRepository.findByUserEmailOpt(userToBeUpdated.getEmail()).isPresent()){
-                throw new ApiRequestException("E-mail is already taken.");
+                throw new ApiRequestException("E-mail başkası tarafından kullanılmaktadır!");
             }  else if (userToBeUpdated.getEmail() != null && userToBeUpdated.getEmail().length()>0) {
                 user.setEmail(userToBeUpdated.getEmail());
             }
@@ -79,28 +91,30 @@ public class ProfileManagementService {
 
 
 
-        // firstname update
+        // İsim boyutu varsa yani güncellenmek istenilen isim boş değilse kullanıcının ismi güncellenir
         if (userToBeUpdated.getFirstName() != null && userToBeUpdated.getFirstName().length() > 0){
             user.setFirstName(userToBeUpdated.getFirstName());
         }
 
-        // lastname update
+        // Soyisim boyutu varsa yani güncellenmek istenilen soyisim boş değilse kullanıcının soyismi güncellenir
         if (userToBeUpdated.getLastName() != null && userToBeUpdated.getLastName().length() > 0){
             user.setLastName(userToBeUpdated.getLastName());
         }
 
-        // password update
-        if( userToBeUpdated.getPassword() != null && userToBeUpdated.getPassword().length()>1 ){
+        // Şifre boyutu varsa yani güncellenmek istenilen şifre boş değilse kullanıcının şifresi güncellenir
+        if( userToBeUpdated.getPassword() != null && userToBeUpdated.getPassword().length()>=8 ){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String enteredPassword = userToBeUpdated.getPassword();
             String dbPassword = user.getPassword();
-
             String encodedPassword = passwordEncoder.encode(userToBeUpdated.getPassword());
             user.setPassword(encodedPassword);
 
         }
+        else{
+            throw new ApiRequestException("Şifre uzunluğu yeterli değil!");
+        }
 
-        // date of birth updated
+        // Doğum tarihi boyutu varsa yani güncellenmek istenilen doğum tarihi boş değilse kullanıcının doğum tarihi güncellenir
         if (userToBeUpdated.getDateOfBirth() != null){
             user.setDateOfBirth(userToBeUpdated.getDateOfBirth());
         }
