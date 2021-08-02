@@ -45,7 +45,7 @@ public class UserService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        user.setUserRole(UserRole.MEMBER);
+        user.setUserRole(UserRole.ÜYE);
 
         // Kullanıcın isim ve soyisim bilgilerini uygun uzunluk durumuna göre kontrol eder
         if (user.getFirstName().length() < 2 && user.getLastName().length() < 2) {
