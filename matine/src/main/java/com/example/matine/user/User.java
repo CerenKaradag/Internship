@@ -60,7 +60,7 @@ public class User {
         this.lastName = "";
         this.email = "";
         this.password = "";
-        this.userRole = UserRole.MEMBER;
+        this.userRole = UserRole.ÜYE;
         this.isReported = false;
         this.isWarned = false;
         this.dateOfBirth = LocalDate.of(1998, Month.JANUARY,26);

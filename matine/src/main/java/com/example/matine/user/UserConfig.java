@@ -1,5 +1,7 @@
 package com.example.matine.user;
 
+import com.example.matine.model.ReportUser;
+import com.example.matine.repository.ReportUserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,16 +16,26 @@ public class UserConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(
-            UserRepository repository) {
+            UserRepository repository, ReportUserRepository reportUserRepository) {
         return args -> {
 
             BCryptPasswordEncoder pencoder = new BCryptPasswordEncoder();
             String encodedPass = pencoder.encode("password");
-            User user1 = new User("cero","Ceren", "Karadağ", "ceren@gmail.com", encodedPass, LocalDate.of(1998,Month.JANUARY,26),false,false,UserRole.SYSTEM_ADMIN);
-            User user2 = new User("utk","Utku", "Karadağ", "utku@gmail.com", encodedPass, LocalDate.of(1991,Month.JULY,24),false,false,UserRole.SYSTEM_ADMIN);
-            User user3 = new User("arzu","Arzu", "Karadağ", "arzu@gmail.com", encodedPass, LocalDate.of(1968,Month.JUNE,10),false,false,UserRole.SYSTEM_ADMIN);
+            User user1 = new User("Cero","Ceren", "Karadağ", "ceren@gmail.com", encodedPass, LocalDate.of(1998,Month.JANUARY,26),false,false,UserRole.SİSTEM_YÖNETİCİSİ);
+            User user2 = new User("Utk","Utku", "Karadağ", "utku@gmail.com", encodedPass, LocalDate.of(1991,Month.JULY,24),false,false,UserRole.SİSTEM_YÖNETİCİSİ);
+            User user3 = new User("Arzu","Arzu", "Karadağ", "arzu@gmail.com", encodedPass, LocalDate.of(1968,Month.JUNE,10),false,false,UserRole.SİSTEM_YÖNETİCİSİ);
+            User user4 = new User("Mj","Michael", "Jordan", "mj@gmail.com", encodedPass, LocalDate.of(1968,Month.JUNE,10),true,false,UserRole.ÜYE);
+            User user5 = new User("Jamess","James", "Nicholson", "jn@gmail.com", encodedPass, LocalDate.of(1968,Month.JUNE,10),false,true,UserRole.ÜYE);
+            User user6 = new User("Pitt","Brad", "Pitt", "pitt@gmail.com", encodedPass, LocalDate.of(1968,Month.JUNE,10),true,false,UserRole.ÜYE);
+            User user7 = new User("Jen","Jennifer", "Anniston", "jen@gmail.com", encodedPass, LocalDate.of(1968,Month.JUNE,10),false,false,UserRole.ÜYE);
+            User user8 = new User("Cc","Courtney", "Cox", "cox@gmail.com", encodedPass, LocalDate.of(1968,Month.JUNE,10),false,false,UserRole.ÜYE);
 
-            repository.saveAll(List.of(user1, user2, user3));
+            ReportUser reportUser1 = new ReportUser(1L,4L,"Amaç dışı kullanım.","Mj");
+            ReportUser reportUser2 = new ReportUser(1L,6L,"Argo yorumlar.","Pitt");
+
+
+            reportUserRepository.saveAll(List.of(reportUser1,reportUser2));
+            repository.saveAll(List.of(user1, user2, user3,user4,user5,user6,user7,user8));
         };
 
 

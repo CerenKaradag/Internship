@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "matine/actors")
+@RequestMapping(path = "/matine/actors")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ActorController {
 
@@ -19,20 +19,16 @@ public class ActorController {
         this.actorService = actorService;
     }
 
-    // Sistemde kayıtlı olan bütün aktörlere erişilmesi
-    @GetMapping
-    public List<Actor> getActors() {
-        return actorService.getActors();
-    }
+
 
     // İlgili içeriğe ait kayıtlı olan bütün aktörlerin bulunması
-    @GetMapping
-    public List<Actor> getActorsForContent(@RequestBody Long contentId) {
+    @GetMapping(path = "/{contentId}")
+    public List<Actor> getActorsForContent(@PathVariable("contentId") Long contentId) {
         return actorService.getActorsForContent(contentId);
     }
 
     // Sisteme yeni aktör eklenmesi
-    @PostMapping
+    @PostMapping(path = "/{contentId}")
     public void createNewActor(@RequestBody Actor actor){
         actorService.addNewActor(actor);
     }

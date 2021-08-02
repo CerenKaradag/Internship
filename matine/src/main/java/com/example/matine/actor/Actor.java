@@ -27,9 +27,8 @@ public class Actor {
     )
 
     // Aktörlerin değişkenleri
-
-    private Long contentId;
     private Long actorId;
+    private Long contentId;
     private String actorName;
     private String actorRole;
 

@@ -1,9 +1,7 @@
 package com.example.matine.actor;
 
-import com.example.matine.model.ReportComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +25,7 @@ public class ActorService {
     // Sisteme yeni aktör eklenmesini sağlayan fonksiyon
     public void addNewActor(Actor actor) {
         actorRepository.save(actor);
+        System.out.println(actor);
     }
 
     // İlgili içeriğe ait aktörlerin bulunduğu fonksiyon
