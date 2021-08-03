@@ -52,6 +52,9 @@ public class ContentService {
             throw new ApiRequestException("Bu içerik daha önce eklendi!");
         }
         Optional<Genre> genre = genreRepository.findGenreByName(content.getGenre());
+        if(genre.isEmpty()){
+            throw new ApiRequestException("Böyle bir tür bulunmamaktadır!!");
+        }
         content.setGenreId(genre.get().getId());
         contentRepository.save(content);
 

@@ -6,7 +6,13 @@ import com.example.matine.content.Content;
 import com.example.matine.content.ContentRepository;
 import com.example.matine.content.ContentType;
 import com.example.matine.model.Archive;
+import com.example.matine.model.Comment;
+import com.example.matine.model.Rate;
+import com.example.matine.model.ReportComment;
 import com.example.matine.repository.ArchiveRepository;
+import com.example.matine.repository.CommentRepository;
+import com.example.matine.repository.RateRepository;
+import com.example.matine.repository.ReportCommentRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +22,7 @@ import java.util.List;
 public class GenreConfig {
 
     @Bean
-    CommandLineRunner commandLineRunnerGenre(GenreRepository genreRepository, ContentRepository contentRepository, ArchiveRepository archiveRepository, ActorRepository actorRepository) {
+    CommandLineRunner commandLineRunnerGenre(GenreRepository genreRepository, ContentRepository contentRepository, ArchiveRepository archiveRepository, ActorRepository actorRepository, RateRepository rateRepository, CommentRepository commentRepository, ReportCommentRepository reportCommentRepository){
         return args -> {
             Genre fantastik = new Genre(1L,"Fantastik");
             Genre drama = new Genre(2L,"Drama");
@@ -474,6 +480,135 @@ public class GenreConfig {
                     "Tom Felton",
                     "Draco Malfoy"
             );
+
+
+            Rate rate1 = new Rate(
+                    1L,
+                    1L,
+                    10
+            );
+            Rate rate2 = new Rate(
+                    1L,
+                    2L,
+                    10
+            );
+            Rate rate3 = new Rate(
+                    1L,
+                    3L,
+                    10
+            );
+            Rate rate4 = new Rate(
+                    1L,
+                    4L,
+                    10
+            );
+            Rate rate5 = new Rate(
+                    1L,
+                    5L,
+                    8
+            );
+            Rate rate6 = new Rate(
+                    4L,
+                    1L,
+                    6
+            );
+            Rate rate7 = new Rate(
+                    4L,
+                    3L,
+                    10
+            );Rate rate8 = new Rate(
+                    4L,
+                    6L,
+                    10
+            );
+            Rate rate9 = new Rate(
+                    4L,
+                    7L,
+                    10
+            );
+            Rate rate10 = new Rate(
+                    4L,
+                    8L,
+                    10
+            );
+            Rate rate11 = new Rate(
+                    25L,
+                    1L,
+                    10
+            );
+            Rate rate12 = new Rate(
+                    25L,
+                    2L,
+                    10
+            );
+            Rate rate13 = new Rate(
+                    25L,
+                    7L,
+                    10
+            );Rate rate14 = new Rate(
+                    25L,
+                    6L,
+                    10
+            );Rate rate15 = new Rate(
+                    25L,
+                    4L,
+                    1
+            );Rate rate16 = new Rate(
+                    25L,
+                    5L,
+                    2
+            );
+
+            Comment comment = new Comment(
+                    1L,
+                    1L,
+                    "Serinin en iyi filmi.",
+                    "Cero",
+                    false
+            );
+
+            Comment comment1 = new Comment(
+                    1L,
+                    2L,
+                    "Aldığı ödülleri sonuna kadar hakediyor",
+                    "Utk",
+                    false
+            );
+
+            Comment comment2 = new Comment(
+                    1L,
+                    7L,
+                    "Oldukça başarılı.",
+                    "Jen",
+                    false
+            );
+            Comment comment3 = new Comment(
+                    1L,
+                    5L,
+                    "Serinin her filmi birbirinden güzel ama en çok bu filmi seviyorum.",
+                    "Jamess",
+                    false
+            );
+            Comment comment4 = new Comment(
+                    1L,
+                    4L,
+                    "Bahisler için bize gelin ...........com",
+                    "Mj",
+                    true
+            );
+
+            ReportComment reportComment =  new ReportComment(
+                    1L,
+                    4L,
+                    1L,
+                    1L,
+                    "Bahisler için bize gelin ...........com"
+
+            );
+
+
+
+
             archiveRepository.saveAll(List.of(archive1,archive2,archive3,archive4,archive5,archive6,archive7,archive8,archive9,archive10,archive11,archive12,
                     archive13,archive14,archiv15,archive16,archive17,archive18,archive19,archive20,archive21));
             contentRepository.saveAll(List.of(fantastik0,fantastik1,fantastik2,fantastik3,fantastik4,fantastik5,fantastik6,fantastik7,fantastik8,fantastik9,fantastik10));
@@ -487,6 +622,11 @@ public class GenreConfig {
                     actor25,actor26,actor27,actor28,actor29,actor30,actor31,actor32,actor33,actor34,actor35,actor36,actor37,actor38,
                     actor39,actor40,actor41,actor42,actor43,actor44,actor45,actor46,actor47,actor48,actor49,actor50,actor51,actor52,
                     actor53,actor54,actor55,actor56,actor57,actor58,actor59,actor60,actor61));
+
+            rateRepository.saveAll(List.of(rate1,rate2,rate3,rate4,rate5,rate6,rate7,rate8,rate9,rate10,rate11,rate12,rate13,rate14,rate15,rate16));
+            commentRepository.saveAll((List.of(comment,comment1,comment2,comment3,comment4)));
+            reportCommentRepository.saveAll(List.of(reportComment));
+
 
 
         };
