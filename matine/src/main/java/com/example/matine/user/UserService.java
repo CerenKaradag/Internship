@@ -48,8 +48,13 @@ public class UserService {
         user.setUserRole(UserRole.ÜYE);
 
         // Kullanıcın isim ve soyisim bilgilerini uygun uzunluk durumuna göre kontrol eder
-        if (user.getFirstName().length() < 2 && user.getLastName().length() < 2) {
+        if (user.getFirstName().length() < 2 || user.getLastName().length() < 2) {
             throw new ApiRequestException("İsim/Soyisim geçersiz!");
+        }
+
+        // Kullanıcın kullanıcı adı bilgisini uygun uzunluk durumuna ve var olma durumuna göre kontrol eder
+        if (user.getUserName().length() < 2 || userRepository.findUserByUsername(user.getUserName()) != null) {
+            throw new ApiRequestException("Kullanıcı adı başkası tarafından kullanılmakta ya da geçersiz!");
         }
 
         // Email bilgisinin sistemde başka bir kullanıcıda kayıtlı olması durumunda ilgili hatayı önyüze iletir
