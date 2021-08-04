@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+}
+.gradient-3{
+  width:150px;
+  height:150px;
+   
+  box-shadow: inset 0 0 100px hsla(0,0%,0%,.3);
+  }
+  
+body {
+  min-height: 100vh;
+  display: flex;
+  font-weight: 400;
+  font-family: sans-serif;
+    width:300px;
+    height:150px;
+    background: rgb(238,174,202);
+    background: linear-gradient(90deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+}
+
+.right
+   {
+      float: right;
+
+      width: 300px;
+
+      
+   }
+body, html, .App, #root, .outer {
+  width: 100%;
+  height: 100%;
+}
+
+.navbar-light {
+  background: rgb(238,174,202);
+  background: linear-gradient(90deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+}
+
+.outer {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  text-align: left;
+}
+
+
+.outer .form-control:focus {
+  border-color: #167bff;
+  box-shadow: none;
+}
+
+.outer h3 {
+  text-align: center;
+  margin: 0;
+  line-height: 2;
+  padding-bottom: 10px;
+}
+
+.custom-control-label {
+  font-weight: 400;
+}
+
+.forgot-password,
+.forgot-password a {
+  text-align: right;
+  font-size: 13px;
+  padding-top: 10px;
+  color: #0e0c0c;
+  margin: 0;
+}
+
+.forgot-password a {
+  color: #592cfc;
+}
+
+.noHover{
+  pointer-events: none;
+}
